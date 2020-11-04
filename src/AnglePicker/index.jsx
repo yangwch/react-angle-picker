@@ -48,33 +48,93 @@ const Circle = props => {
       <IconCircle />
     </CircleWrapper>
   );
-}
+};
+
+// 弧度转角度
+export const radianToAngle = radian => (radian * 180) / Math.PI;
+
 
 export default class AnglePicker extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      angle: props.angle || 0,
+      angle: props.value || 0,
     };
-  }
 
-//   var theta = Math.PI;
-// var r = rotate(ballA, center, Math.PI / 3);
-// ballB.x = r.x;
-// ballB.y = r.y;
+    this.wrapperRef = React.createRef(null);
+    this.mousedown = this.mousedown.bind(this);
+    this.mousemove = this.mousemove.bind(this);
+    this.mouseup = this.mouseup.bind(this);
+  }
 
   getRotatedPosition(angle) {
     const theta = (angle / 180) * Math.PI;
-    var _x = (startPoint.x - center.x) * Math.cos(theta) - (startPoint.y - center.y) * Math.sin(theta) + center.x;
-    var _y = (startPoint.x - center.x) * Math.sin(theta) + (startPoint.y - center.y) * Math.cos(theta) + center.y;
-    return {x: _x, y: _y};
+    var x = (startPoint.x - center.x) * Math.cos(theta) - (startPoint.y - center.y) * Math.sin(theta) + center.x;
+    var y = (startPoint.x - center.x) * Math.sin(theta) + (startPoint.y - center.y) * Math.cos(theta) + center.y;
+    return { x, y };
+  }
+
+  // 计算点击位置的角度
+  getNewAngleByEvent(e) {
+    const wrapperEl = this.wrapperRef && this.wrapperRef.current;
+    if (e && wrapperEl) {
+      const { clientX, clientY } = e;
+      const rect = wrapperEl.getClientRects()[0];
+      const { x , y } = rect;
+      // 中心点坐标
+      const centerP = { x: x + center.x, y: y + center.y };
+      // const startP = { x: x + startPoint.x, y: y + startPoint.y };
+      // 计算弧度
+      const nx = clientX - centerP.x;
+      const ny = clientY - centerP.y;
+      const radian = Math.atan2(ny, nx);
+      return radianToAngle(radian);
+    }
+    return null;
+  }
+
+  mousedown(e) {
+    const angle = this.getNewAngleByEvent(e);
+    if (typeof angle === 'number') {
+      this.setState({ angle });
+      this.addMouseListeners();
+    }
+  }
+
+  addMouseListeners() {
+    document.addEventListener('mousemove', this.mousemove);
+    document.addEventListener('mouseup', this.mouseup);
+  }
+
+  removeMouseListeners() {
+    document.removeEventListener('mousemove', this.mousemove);
+    document.removeEventListener('mouseup', this.mouseup);
+  }
+
+  mousemove(e) {
+    const angle = this.getNewAngleByEvent(e);
+    if (typeof angle === 'number') {
+      this.setState({ angle });
+    }
+  }
+
+  mouseup(e) {
+    this.removeMouseListeners();
+    const angle = this.getNewAngleByEvent(e);
+    if (typeof angle === 'number') {
+      this.setState({ angle });
+      if (this.props.onChange) {
+        this.props.onChange(angle);
+      }
+    }
   }
 
   render() {
     const { angle } = this.state;
-    const rotatedPosition = this.getRotatedPosition(angle)
+    const { getRotatedPosition, mousedown } = this;
+    const rotatedPosition = getRotatedPosition(angle)
     return (
-      <Container>
+      <Container ref={this.wrapperRef} onMouseDown={mousedown}>
         <Circle x={rotatedPosition.x} y={rotatedPosition.y} />
       </Container>
     );

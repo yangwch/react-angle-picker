@@ -15,9 +15,10 @@ const Wrapper = styled.div`
 `;
 
 function App() {
+  const [angle, setAngle] = React.useState(45);
   return (
     <Wrapper>
-      <AnglePicker />
+      <AnglePicker value={angle} onChange={setAngle} />
     </Wrapper>
   );
 }
