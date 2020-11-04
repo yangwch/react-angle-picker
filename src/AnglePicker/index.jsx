@@ -1,17 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { WIDTH, BORDER_WIDTH, CIRCLE_WIDTH } from './Constant';
-
-// 起点
-const startPoint = {
-  x: WIDTH - CIRCLE_WIDTH / 2 - BORDER_WIDTH,
-  y: WIDTH / 2,
-};
-
-const center = {
-  x: WIDTH / 2 - BORDER_WIDTH,
-  y: WIDTH / 2 - BORDER_WIDTH,
-};
+import { WIDTH, BORDER_WIDTH, CIRCLE_WIDTH, startPoint, center } from './Constant';
+import Circle from './Circle';
 
 
 const Container = styled.div`
@@ -24,31 +14,6 @@ const Container = styled.div`
   box-sizing: border-box;
 `;
 
-const CircleWrapper = styled.div`
-  left: ${startPoint.x}px;
-  top: ${startPoint.y}px;
-  position: absolute;
-  width: 0;
-  height: 0;
-`;
-
-const IconCircle = styled.div`
-  width: ${CIRCLE_WIDTH}px;
-  height: ${CIRCLE_WIDTH}px;
-  background-color: rgba(0, 0, 0, 0.4);
-  -webkit-border-radius: 50%;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-`;
-
-const Circle = props => {
-  const { x, y } = props;
-  return (
-    <CircleWrapper style={{ left: x, top: y }}>
-      <IconCircle />
-    </CircleWrapper>
-  );
-};
 
 // 弧度转角度
 export const radianToAngle = radian => (radian * 180) / Math.PI;

@@ -4,8 +4,8 @@ import AnglePicker from './AnglePicker';
 
 
 const Wrapper = styled.div`
-  width: 100px;
-  height: 100px;
+  width: 300px;
+  height: 300px;
   border: 1px solid rgb(0, 0, 0);
   margin: 200px auto;
   display: flex;
