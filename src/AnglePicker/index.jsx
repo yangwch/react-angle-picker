@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { WIDTH, BORDER_WIDTH, CIRCLE_WIDTH, startPoint, center } from './Constant';
+import { WIDTH, startPoint, center } from './Constant';
 import Circle from './Circle';
 
 
@@ -16,7 +16,13 @@ const Container = styled.div`
 
 
 // 弧度转角度
-export const radianToAngle = radian => (radian * 180) / Math.PI;
+export const radianToAngle = radian => {
+  const angle =  Math.round((radian * 180) / Math.PI);
+  if (angle < 0) {
+    return 360 + angle;
+  }
+  return angle;
+}
 
 
 export default class AnglePicker extends Component {
@@ -62,6 +68,9 @@ export default class AnglePicker extends Component {
     const angle = this.getNewAngleByEvent(e);
     if (typeof angle === 'number') {
       this.setState({ angle });
+      if (this.props.onChange) {
+        this.props.onChange(angle);
+      }
       this.addMouseListeners();
     }
   }
@@ -80,6 +89,9 @@ export default class AnglePicker extends Component {
     const angle = this.getNewAngleByEvent(e);
     if (typeof angle === 'number') {
       this.setState({ angle });
+      if (this.props.onChange) {
+        this.props.onChange(angle);
+      }
     }
   }
 
@@ -88,7 +100,9 @@ export default class AnglePicker extends Component {
     const angle = this.getNewAngleByEvent(e);
     if (typeof angle === 'number') {
       this.setState({ angle });
-      if (this.props.onChange) {
+      if (this.props.onAfterChange) {
+        this.props.onAfterChange(angle);
+      } else if (this.props.onChange) {
         this.props.onChange(angle);
       }
     }
@@ -96,11 +110,12 @@ export default class AnglePicker extends Component {
 
   render() {
     const { angle } = this.state;
+    const { circleColor } = this.props;
     const { getRotatedPosition, mousedown } = this;
-    const rotatedPosition = getRotatedPosition(angle)
+    const rotatedPosition = getRotatedPosition(angle);
     return (
       <Container ref={this.wrapperRef} onMouseDown={mousedown}>
-        <Circle x={rotatedPosition.x} y={rotatedPosition.y} />
+        <Circle x={rotatedPosition.x} y={rotatedPosition.y} color={circleColor} />
       </Container>
     );
   }
