@@ -1,18 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
-import { CIRCLE_WIDTH, startPoint } from './Constant';
+import { CIRCLE_WIDTH } from './constant';
 
-const CircleWrapper = styled.div`
-  left: ${startPoint.x}px;
-  top: ${startPoint.y}px;
+const CircleWrapper = styled.div.attrs(props => ({
+  style: {
+    left: props.left,
+    top: props.top,
+  }
+}))`
   position: absolute;
   width: 0;
   height: 0;
 `;
 
-const IconCircle = styled.div`
-  width: ${CIRCLE_WIDTH}px;
-  height: ${CIRCLE_WIDTH}px;
+const IconCircle = styled.div.attrs(props => ({
+  style: {
+    width: props.width || CIRCLE_WIDTH,
+    height: props.width || CIRCLE_WIDTH,
+  },
+}))`
   background: ${props => props.color ? props.color : 'rgba(0,0,0,0.4)'};
   -webkit-border-radius: 50%;
   border-radius: 50%;
@@ -20,10 +26,10 @@ const IconCircle = styled.div`
 `;
 
 const Circle = props => {
-  const { x, y, color } = props;
+  const { x, y, color, width } = props;
   return (
-    <CircleWrapper style={{ left: x, top: y }}>
-      <IconCircle color={color} />
+    <CircleWrapper left={x} top={y}>
+      <IconCircle color={color} width={width} />
     </CircleWrapper>
   );
 };

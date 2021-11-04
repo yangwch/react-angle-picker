@@ -9,9 +9,14 @@ const Wrapper = styled.div`
   border: 1px solid rgb(0, 0, 0);
   margin: 200px auto;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   justify-items: center;
+`;
+
+const ValueWrapper = styled.div`
+  padding: 20px;
 `;
 
 function App() {
@@ -26,11 +31,14 @@ function App() {
   }
   return (
     <Wrapper>
+      <ValueWrapper>{angle}</ValueWrapper>
       <AnglePicker
         value={angle}
+        circleColor='#ff0000'
+        width={150}
+        circleWidth={20}
         onChange={onChange}
         onAfterChange={onAfterChange}
-        circleColor='#ff0000'
       />
     </Wrapper>
   );
