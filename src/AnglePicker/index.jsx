@@ -1,33 +1,9 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
 import { WIDTH, BORDER_WIDTH, CIRCLE_WIDTH } from './constant';
 import Circle from './Circle';
-import { getCenter, getStartPoint } from './service';
-
-
-const Container = styled.div.attrs(props => ({
-  style: {
-    width: props.width || WIDTH,
-    height: props.width || WIDTH,
-  }
-}))`
-  position: relative;
-  border: 1px solid #ccc;
-  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.16);
-  border-radius: 50%;
-  box-sizing: border-box;
-`;
-
-
-// 弧度转角度
-export const radianToAngle = radian => {
-  const angle =  Math.round((radian * 180) / Math.PI);
-  if (angle < 0) {
-    return 360 + angle;
-  }
-  return angle;
-}
-
+import { getCenter, getStartPoint, radianToAngle } from './service';
+import Border from './Border';
+import PropTypes from 'prop-types';
 
 export default class AnglePicker extends Component {
   constructor(props) {
@@ -43,6 +19,17 @@ export default class AnglePicker extends Component {
     this.getStartPoint = this.getStartPoint.bind(this);
     this.getCenter = this.getCenter.bind(this);
     this.getRotatedPosition = this.getRotatedPosition.bind(this);
+  }
+
+  propTypes = {
+    borderColor: PropTypes.string,
+    circleColor: PropTypes.string,
+    circleWidth: PropTypes.number,
+    width: PropTypes.number,
+    value: PropTypes.number,
+    borderStyle: PropTypes.string,
+    onChange: PropTypes.func,
+    onAfterChange: PropTypes.func,
   }
 
   getCenter() {
@@ -72,7 +59,7 @@ export default class AnglePicker extends Component {
       const center = this.getCenter();
       const { clientX, clientY } = e;
       const rect = wrapperEl.getClientRects()[0];
-      const { x , y } = rect;
+      const { x, y } = rect;
       // 中心点坐标
       const centerP = { x: x + center.x, y: y + center.y };
       // 计算弧度
@@ -130,13 +117,19 @@ export default class AnglePicker extends Component {
 
   render() {
     const { angle } = this.state;
-    const { circleColor, circleWidth, width } = this.props;
+    const { circleColor, circleWidth, width, borderColor, borderStyle } = this.props;
     const { getRotatedPosition, mousedown } = this;
     const rotatedPosition = getRotatedPosition(angle);
     return (
-      <Container ref={this.wrapperRef} onMouseDown={mousedown} width={width}>
+      <Border
+        ref={this.wrapperRef}
+        onMouseDown={mousedown}
+        width={width}
+        borderColor={borderColor}
+        borderStyle={borderStyle}
+      >
         <Circle x={rotatedPosition.x} y={rotatedPosition.y} color={circleColor} width={circleWidth} />
-      </Container>
+      </Border>
     );
   }
 }

@@ -34,11 +34,13 @@ function App() {
       <ValueWrapper>{angle}</ValueWrapper>
       <AnglePicker
         value={angle}
-        circleColor='#ff0000'
-        width={150}
-        circleWidth={20}
         onChange={onChange}
         onAfterChange={onAfterChange}
+        width={150}
+        circleWidth={20}
+        circleColor='#000'
+        borderColor="red"
+        borderStyle="dashed"
       />
     </Wrapper>
   );
