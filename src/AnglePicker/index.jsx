@@ -21,14 +21,22 @@ export default class AnglePicker extends Component {
     this.getRotatedPosition = this.getRotatedPosition.bind(this);
   }
 
-  propTypes = {
+  static propTypes = {
+    // 边框色
     borderColor: PropTypes.string,
+    // 小圆点颜色
     circleColor: PropTypes.string,
+    // 小圆点尺寸
     circleWidth: PropTypes.number,
+    // 宽度
     width: PropTypes.number,
+    // 角度值
     value: PropTypes.number,
+    // 边框样式 dashed dotted solid ...
     borderStyle: PropTypes.string,
+    // 角度变化
     onChange: PropTypes.func,
+    // 鼠标抬起，角度改变完毕
     onAfterChange: PropTypes.func,
   }
 
