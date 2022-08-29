@@ -6,7 +6,7 @@ export const getStartPoint = (
   borderWidth: number,
 ): Point => ({
   x: width - circleWidth / 2 - borderWidth * 2,
-  y: width / 2,
+  y: width / 2 - borderWidth,
 });
 
 export const getCenter = (width: number, borderWidth: number) => ({

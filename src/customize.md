@@ -1,4 +1,4 @@
-# 自定义
+# Customize
 
 ## 自定义尺寸、颜色
 
@@ -7,7 +7,7 @@ import React from 'react';
 import { ReactAnglePicker } from 'react-angle-picker';
 
 export default () => {
-  const [value, setValue] = React.useState(45);
+  const [value, setValue] = React.useState(0);
   return (
     <div>
       <div>当前值：{value}º</div>
