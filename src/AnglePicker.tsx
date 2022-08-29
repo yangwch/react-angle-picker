@@ -3,65 +3,84 @@ import { WIDTH, BORDER_WIDTH, CIRCLE_WIDTH } from './constant';
 import Circle from './Circle';
 import { getCenter, getStartPoint, radianToAngle } from './service';
 import Border from './Border';
-import PropTypes from 'prop-types';
+import { Point } from './interface';
 
-export default class AnglePicker extends Component {
-  constructor(props) {
+/** for props check */
+export interface PickerProps {
+  // 边框色
+  borderColor?: string | undefined;
+  // 小圆点颜色
+  pointerColor?: string | undefined;
+  // 小圆点尺寸
+  pointerWidth?: number | undefined;
+  // 宽度
+  width?: number | undefined;
+  // 角度值
+  value?: number;
+  // 边框样式 dashed dotted solid ...
+  borderStyle?: string | undefined;
+  // 边框宽度
+  borderWidth?: number | undefined;
+  // 角度变化
+  onChange?: (newValue: number) => void | undefined;
+  // 鼠标抬起，角度改变完毕
+  onAfterChange?: (interactiveValue: number) => void | undefined;
+  // 鼠标移动时是否阻止默认行为
+  preventDefault?: boolean;
+}
+
+interface PickerState {
+  angle: number;
+}
+
+export default class AnglePicker extends Component<PickerProps, PickerState> {
+  constructor(props: PickerProps) {
     super(props);
     this.state = {
       angle: props.value || 0,
     };
 
-    this.wrapperRef = React.createRef(null);
-    this.mousedown = this.mousedown.bind(this);
     this.mousemove = this.mousemove.bind(this);
     this.mouseup = this.mouseup.bind(this);
     this.getStartPoint = this.getStartPoint.bind(this);
     this.getCenter = this.getCenter.bind(this);
     this.getRotatedPosition = this.getRotatedPosition.bind(this);
+    this.getNewAngleByEvent = this.getNewAngleByEvent.bind(this);
   }
 
-  static propTypes = {
-    // 边框色
-    borderColor: PropTypes.string,
-    // 小圆点颜色
-    circleColor: PropTypes.string,
-    // 小圆点尺寸
-    circleWidth: PropTypes.number,
-    // 宽度
-    width: PropTypes.number,
-    // 角度值
-    value: PropTypes.number,
-    // 边框样式 dashed dotted solid ...
-    borderStyle: PropTypes.string,
-    // 角度变化
-    onChange: PropTypes.func,
-    // 鼠标抬起，角度改变完毕
-    onAfterChange: PropTypes.func,
-  }
+  wrapperRef = React.createRef<HTMLDivElement>();
 
-  getCenter() {
+  getCenter(): Point {
     const { width = WIDTH, borderWidth = BORDER_WIDTH } = this.props;
-    const center = getCenter(width, borderWidth)
-    return center;
+    return getCenter(width, borderWidth);
   }
 
   getStartPoint() {
-    const { width = WIDTH, circleWidth = CIRCLE_WIDTH, borderWidth = BORDER_WIDTH } = this.props;
-    return getStartPoint(width, circleWidth, borderWidth);
+    const {
+      width = WIDTH,
+      pointerWidth = CIRCLE_WIDTH,
+      borderWidth = BORDER_WIDTH,
+    } = this.props;
+    return getStartPoint(width, pointerWidth, borderWidth);
   }
 
-  getRotatedPosition(angle) {
+  getRotatedPosition(angle: number) {
     const center = this.getCenter();
     const startPoint = this.getStartPoint();
     const theta = (angle / 180) * Math.PI;
-    var x = (startPoint.x - center.x) * Math.cos(theta) - (startPoint.y - center.y) * Math.sin(theta) + center.x;
-    var y = (startPoint.x - center.x) * Math.sin(theta) + (startPoint.y - center.y) * Math.cos(theta) + center.y;
+    var x =
+      (startPoint.x - center.x) * Math.cos(theta) -
+      (startPoint.y - center.y) * Math.sin(theta) +
+      center.x;
+    var y =
+      (startPoint.x - center.x) * Math.sin(theta) +
+      (startPoint.y - center.y) * Math.cos(theta) +
+      center.y;
     return { x, y };
   }
 
   // 计算点击位置的角度
-  getNewAngleByEvent(e) {
+  getNewAngleByEvent = (e: MouseEvent | React.MouseEvent) => {
     const wrapperEl = this.wrapperRef && this.wrapperRef.current;
     if (e && wrapperEl) {
       const center = this.getCenter();
@@ -77,9 +96,11 @@ export default class AnglePicker extends Component {
       return radianToAngle(radian);
     }
     return null;
-  }
+  };
 
-  mousedown(e) {
+  mousedown: React.MouseEventHandler<HTMLDivElement> = (
+    e: MouseEvent | React.MouseEvent,
+  ) => {
     const angle = this.getNewAngleByEvent(e);
     if (typeof angle === 'number') {
       this.setState({ angle });
@@ -88,7 +109,7 @@ export default class AnglePicker extends Component {
       }
       this.addMouseListeners();
     }
-  }
+  };
 
   addMouseListeners() {
     document.addEventListener('mousemove', this.mousemove);
@@ -100,7 +121,10 @@ export default class AnglePicker extends Component {
     document.removeEventListener('mouseup', this.mouseup);
   }
 
-  mousemove(e) {
+  mousemove(e: MouseEvent) {
+    if (this.props.preventDefault) {
+      e.preventDefault();
+    }
     const angle = this.getNewAngleByEvent(e);
     if (typeof angle === 'number') {
       this.setState({ angle });
@@ -110,7 +134,10 @@ export default class AnglePicker extends Component {
     }
   }
 
-  mouseup(e) {
+  mouseup(e: MouseEvent) {
+    if (this.props.preventDefault) {
+      e.preventDefault();
+    }
     this.removeMouseListeners();
     const angle = this.getNewAngleByEvent(e);
     if (typeof angle === 'number') {
@@ -125,7 +152,14 @@ export default class AnglePicker extends Component {
 
   render() {
     const { angle } = this.state;
-    const { circleColor, circleWidth, width, borderColor, borderStyle } = this.props;
+    const {
+      pointerColor,
+      pointerWidth,
+      width,
+      borderColor,
+      borderStyle,
+      borderWidth,
+    } = this.props;
     const { getRotatedPosition, mousedown } = this;
     const rotatedPosition = getRotatedPosition(angle);
     return (
@@ -135,8 +169,14 @@ export default class AnglePicker extends Component {
         width={width}
         borderColor={borderColor}
         borderStyle={borderStyle}
+        borderWidth={borderWidth}
       >
-        <Circle x={rotatedPosition.x} y={rotatedPosition.y} color={circleColor} width={circleWidth} />
+        <Circle
+          x={rotatedPosition.x}
+          y={rotatedPosition.y}
+          color={pointerColor}
+          width={pointerWidth}
+        />
       </Border>
     );
   }

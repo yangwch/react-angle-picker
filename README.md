@@ -1,11 +1,27 @@
-# React Angle Picker
+# react-angle-picker
 
-可视化角度选择组件。
+## Getting Started
 
-## 启动
+Install dependencies,
 
-### `yarn start`
+```bash
+$ npm i
+```
 
-## build
-### `yarn build`
+Start the dev server,
 
+```bash
+$ npm start
+```
+
+Build documentation,
+
+```bash
+$ npm run docs:build
+```
+
+Build library via `father-build`,
+
+```bash
+$ npm run build
+```
