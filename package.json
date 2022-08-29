@@ -5,7 +5,7 @@
     "email": "fire_snow@163.com"
   },
   "homepage": "https://github.com/yangwch/react-angle-picker",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "scripts": {
     "start": "dumi dev",
     "docs:build": "dumi build",
