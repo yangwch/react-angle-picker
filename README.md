@@ -1,27 +1,72 @@
 # react-angle-picker
 
-## Getting Started
+## Usage
 
-Install dependencies,
+Install dependencies
 
 ```bash
-$ npm i
+$ npm install react-angle-picker
 ```
 
-Start the dev server,
+## Basic
 
-```bash
-$ npm start
+```tsx
+import React from 'react';
+import { ReactAnglePicker } from 'react-angle-picker';
+
+export default () => {
+  const [angle, setAngle] = React.useState(30);
+  return (
+    <div>
+      <div>{angle}º</div>
+      <ReactAnglePicker
+        value={angle}
+        onChange={setAngle}
+        onAfterChange={setAngle}
+      />
+    </div>
+  );
+};
 ```
 
-Build documentation,
+## Customize
 
-```bash
-$ npm run docs:build
+```tsx
+import React from 'react';
+import { ReactAnglePicker } from 'react-angle-picker';
+
+export default () => {
+  const [value, setValue] = React.useState(45);
+  return (
+    <div>
+      <div>当前值：{value}º</div>
+      <ReactAnglePicker
+        value={value}
+        onChange={setValue}
+        width={100}
+        pointerWidth={30}
+        pointerColor="red"
+        borderColor="green"
+        borderWidth={8}
+      />
+    </div>
+  );
+};
 ```
 
-Build library via `father-build`,
+## PreventDefault
 
-```bash
-$ npm run build
+```tsx
+import React from 'react';
+import { ReactAnglePicker } from 'react-angle-picker';
+
+export default () => {
+  const [value, setValue] = React.useState(45);
+  return (
+    <div>
+      <div>当前值：{value}º</div>
+      <ReactAnglePicker value={value} onChange={setValue} preventDefault />
+    </div>
+  );
+};
 ```
