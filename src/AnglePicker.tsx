@@ -50,6 +50,15 @@ export default class AnglePicker extends Component<PickerProps, PickerState> {
 
   wrapperRef = React.createRef<HTMLDivElement>();
 
+  static getDerivedStateFromProps(props: PickerProps, state: PickerState) {
+    if (typeof props.value === 'number' && state.angle !== props.value) {
+      return {
+        angle: props.value,
+      };
+    }
+    return null;
+  }
+
   getCenter(): Point {
     const { width = WIDTH, borderWidth = BORDER_WIDTH } = this.props;
     return getCenter(width, borderWidth);
