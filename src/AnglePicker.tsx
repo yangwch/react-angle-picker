@@ -123,6 +123,8 @@ export default class AnglePicker extends Component<PickerProps, PickerState> {
   addMouseListeners() {
     document.addEventListener('mousemove', this.mousemove);
     document.addEventListener('mouseup', this.mouseup);
+    document.addEventListener('contextmenu', this.mouseup);
+    document.addEventListener('pointercancel', this.mouseup);
   }
 
   removeMouseListeners() {

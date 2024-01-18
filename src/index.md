@@ -2,7 +2,7 @@
 
 ## Set value onChange:
 
-```tsx
+```jsx
 import React from 'react';
 import { ReactAnglePicker } from 'react-angle-picker';
 
@@ -19,16 +19,24 @@ export default () => {
 
 ## Set value onAfterChange:
 
-```tsx
+```jsx
 import React from 'react';
 import { ReactAnglePicker } from 'react-angle-picker';
 
 export default () => {
   const [angle, setAngle] = React.useState(30);
+  const onAfterChange = (value) => {
+    console.log('save value:', value);
+    setAngle(value);
+  };
   return (
     <div>
       <div>{angle}</div>
-      <ReactAnglePicker value={angle} onAfterChange={setAngle} />
+      <ReactAnglePicker
+        value={angle}
+        onChange={setAngle}
+        onAfterChange={onAfterChange}
+      />
     </div>
   );
 };

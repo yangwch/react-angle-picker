@@ -19,6 +19,7 @@ export default () => {
         pointerColor="red"
         borderColor="green"
         borderWidth={8}
+        borderStyle="dotted"
       />
     </div>
   );

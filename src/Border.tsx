@@ -11,12 +11,11 @@ interface BorderProps {
 const Border = styled.div<BorderProps>`
   width: ${(props: BorderProps) => props.width || WIDTH}px;
   height: ${(props: BorderProps) => props.width || WIDTH}px;
-  border-style: ${(props: BorderProps) => props.borderStyle}px;
-  border-color: ;
   position: relative;
   border: ${(props: BorderProps) =>
       typeof props.borderWidth === 'number' ? props.borderWidth : 1}px
-    solid ${(props: BorderProps) => props.borderColor || '#ccc'};
+    ${(props: BorderProps) => props.borderStyle || 'solid'}
+    ${(props: BorderProps) => props.borderColor || '#ccc'};
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.16);
   border-radius: 50%;
   box-sizing: border-box;
